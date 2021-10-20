@@ -1,10 +1,16 @@
-#gao-laravel-react
+# gao-laravel-react
 
-## Initialisation du projet
+#Récupération du projet
 
+    npm install
     composer install
 
-Pour lancer le serveur et lancer la compilation de react :
+    créer fichier .env en prenant l'exemple .env.example
 
+    php artisan migrate
+    php artisan key:generate
+    php artisan db:seed --class=DatabaseSeeder
     php artisan serve
-    npm run dev
+    npm run watch
+
+# TODO
