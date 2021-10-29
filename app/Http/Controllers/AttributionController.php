@@ -16,25 +16,35 @@ class AttributionController extends Controller
         return AttributionResource::collection(Attribution::all());
     }
 
-    public function add(Request $request)
+    public function create(Request $request)
     {
         $validatedData = $this->validate($request, [
-            'hour' => 'required|string',
+            'hours' => 'required|integer',
             'date' => 'required|date',
-            'customer_id' => 'required|exists:customer,id',
-            'computer_id' => 'required|exists:computer,id',
+            'customerId' => 'required|exists:customer,id',
+            'computerId' => 'required|exists:computer,id',
         ]);
+
+        $date  = strtotime($validatedData['date']) ;
 
         $addAttribution = new Attribution();
 
-        $addAttribution->hour = $validatedData['hour'];
-        $addAttribution->date = $validatedData['date'];
-        $addAttribution->customer_id = $validatedData['customer_id'];
-        $addAttribution->computer_id = $validatedData['computer_id'];
+        $addAttribution->hour = $validatedData['hours'];
+        $addAttribution->date = date('Y-m-d', $date);
+        $addAttribution->customer_id = $validatedData['customerId'];
+        $addAttribution->computer_id = $validatedData['computerId'];
         $addAttribution->save();
 
-         new AttributionResource($addAttribution);
-        return $this->index();
-
+        return new AttributionResource($addAttribution);
     }
+
+    public function deleteAttribution($id): \Illuminate\Http\JsonResponse
+    {
+        Attribution::destroy($id);
+        return response()->json([
+            'success' => true,
+            'message' => "Suppression réussie"
+        ]);
+    }
+
 }

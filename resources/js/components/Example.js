@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Home from "../Views/Home";
 
 function Example() {
     return (
@@ -19,6 +20,6 @@ function Example() {
 
 export default Example;
 
-if (document.getElementById('example')) {
-    ReactDOM.render(<Example />, document.getElementById('example'));
+if (document.getElementById('home')) {
+    ReactDOM.render(<Home />, document.getElementById('home'));
 }

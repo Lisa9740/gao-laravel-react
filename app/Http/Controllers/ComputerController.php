@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Http\Resources\ComputerResource;
 use App\Models\Computer;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
-class ComputerController extends Controller
+class ComputerController extends BaseController
 {
     public function index()
     {
@@ -21,12 +22,19 @@ class ComputerController extends Controller
             ]);
 
             $addComputer = new Computer();
-
             $addComputer->name = $validatedData['name'];
             $addComputer->save();
+            return $this->sendResponse(['success' => true, 'content' => new ComputerResource($addComputer)]);
+    }
 
-            new ComputerResource($addComputer);
-            return $this->index();
+    public function findAll(Request $request)
+    {
+        $currentDate = $request->query('date');
 
+        $computers = Computer::with(array('attributions' => function ($query) use ($currentDate) {
+            $query->where('date', $currentDate);
+        }))->paginate(6);
+
+        return ComputerResource::collection($computers);
     }
 }
